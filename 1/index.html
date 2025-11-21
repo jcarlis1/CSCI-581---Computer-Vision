@@ -1,8 +1,291 @@
 <!DOCTYPE html>
-  <html>
-    <head>
-    </head>
-    <body>
-      <h1>Computer Vision</h1>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta author="Joey Carlisle">
+    <title>CS 581: Project 1</title>
+    <link rel="icon" href="img/eye.png">
+    <link rel="stylesheet" type="text/css" href="../styles.css" />
+</head>
+<body>
+    <header>
+        <a class="inline" href="../index.html">&lt- Back Home</a>
+        <nav>
+            <h1>CS 581: Project 1</h1>
+        </nav>
+    </header>
+    <main>
+        <div>
+            <h2>Part 1: Perspective and orthographic projections</h2>
+            <div>
+                <h3>Question 1:</h3>
+                <div class="images">
+                <article>
+                    <figure>
+                        <img src="img/hall.jpeg" alt="Hallway with lines drawn" width="300" height="400"/>
+                        <figcaption>Hallway in Weir Hall,<br>Persepctive</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="img/hallZoomed.jpeg" alt="Zoomed in image of the hallway" width="300" height="400"/>
+                        <figcaption>The same hallway zooomed in,<br>Orthographic</figcaption>
+                    </figure>
+                </article>
+                </div>
+                <div id="answers">
+                <p>In the first image (Persepctive), it is clear that the lines appear to converage.</p>
+                <p>In the second image (Orthographic), the lines in the carpet appear parallel.</p>
+                <p>In both, it's simply distance that causes the effects.</p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div>
+            <h2>Part 2: Histogram Manipulation & Linear Filtering</h2>
+            <div>
+                <h3>(a) Histogram Equalization on Provided Images (required)</h3>
+                <h4>Question 1: You are given three test images with low or uneven contrast. The task is to:</h4>
+                <h5>Compute the histogram of each image.</h5>
+                <ul>
+                    <li>Compute the histogram of each image.</li>
+                    <li>Compute the cumulative distribution function (CDF) from the histogram.</li>
+                    <li>Use the CDF to perform histogram equalization.</li>
+                    <li>Display, for each test image:</li>
+                    <ul>
+                        <li>The original image and its histogram</li>
+                        <li>The equalized image and its histogram</li>
+                    </ul>
+                </ul>
+            <div class="images">
+                <article>
+                    <figure>
+                        <img class="hist" src="img/image1hist.png" alt="Histrogram" width="350" height="250"/>
+                        <figcaption>Original and Histrogram image 1</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="img/image1eq.png" alt="CDF" width="350" height="250"/>
+                        <figcaption>Equalized and Histogram image 1</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <figure>
+                        <img src="img/image2hist.png" alt="Histrogram" width="350" height="250"/>
+                        <figcaption>Original and Histrogram image 2</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="img/image2eq.png" alt="CDF" width="350" height="250"/>
+                        <figcaption>Equalized and Histogram image 2</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <figure>
+                        <img src="img/image3hist.png" alt="Histrogram" width="350" height="250"/>
+                        <figcaption>Original and Histrogram image 3</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="img/image3eq.png" alt="CDF" width="350" height="250"/>
+                        <figcaption>Equalized and Histogram image 3</figcaption>
+                    </figure>
+                </article>
+            </div>
+            <br>
+            <h3>(b) Creative Task: Apply to Your Own Images (required)</h3>
+            <h4>Question 2: Find at least one of your own images with poor contrast (too dark, too bright, or low contrast).<br>Apply your histogram equalization implementation to this image and show the result.</h4>
+            <div class="images">
+                <article>
+                    <figure>
+                        <img src="img/skateHist.png" alt="Girl Skating" width="350" height="250"/>
+                        <figcaption>Original and Histrogram</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="img/skateEQ.png" alt="Girl Skating" width="350" height="250"/>
+                        <figcaption>Equalizated and Histogram</figcaption>
+                    </figure>
+                </article>
+            </div>
+            <div id="answers">
+                <p>The equalization made the image look brighter (the reflected snowflakes lights in the back wall are brighter), but also showed more features on the ice. <br>
+                In some ways the image looks better, but the equalization enhances some issue that make the image look bad. Overall it does look better.</p>
+            </div>
+            <br>
+            <h3>(c) Optional Challenge: Histogram Matching (optional)</h3>
+            <h4>Question 3: As an optional extension, try implementing histogram matching.<br>The goal is to transform the histogram of a given image so that it matches a target histogram.</h4>
+            <br>
+            <h3>(d) Derivative of Gaussian (Required)</h3>
+            <h4>Question 4: You are given three test images, the task is to: </h4>
+            <ul>
+                <li>Naive Approach (Two Steps)</li>
+                    <ul>
+                        <li>Smooth the image using a Gaussian filter.</li>
+                        <li>Apply a simple derivative filter (e.g., [-1, 0, 1]) in the x-direction and y-direction separately.</li>
+                        <li>Compute and visualize the results for both directions.</li>
+                    </ul>
+                <li>Direct Approach (One Step)</li>
+                    <ul>
+                        <li>Construct a derivative of Gaussian filter in the x-direction and y-direction.</li>
+                        <li>Convolve the image directly with these filters.</li>
+                        <li>Visualize the results.</li>
+                    </ul>
+                <li>Comparison</li>
+                    <ul>
+                        <li>Display the outputs from both approaches side by side.</li>
+                        <li>Briefly describe your observations: are the results nearly the same? Why might small differences appear?</li>
+                    </ul>
+            </ul>
+            <div class="images">
+                <article>
+                    <figure>
+                        <img src="img/image4Naive.png" alt="Gaussian image" width="350" height="150"/>
+                        <figcaption>Naive Approach</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="img/image4Direct.png" alt="Gaussian image" width="350" height="150"/>
+                        <figcaption>Direct Approach</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <figure>
+                        <img src="img/image5Naive.png" alt="Gaussian image" width="350" height="150"/>
+                        <figcaption>Naive Approach</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="img/image5Direct.png" alt="Gaussian image" width="350" height="150"/>
+                        <figcaption>Direct Approach</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <figure>
+                        <img src="img/image6Naive.png" alt="Gaussian image" width="350" height="150"/>
+                        <figcaption>Naive Approach</figcaption>
+                </figure>
+                    <figure>
+                        <img src="img/image6Direct.png" alt="Gaussian image" width="350" height="150"/>
+                        <figcaption>Direct Approach</figcaption>
+                    </figure>
+                </article>
+            </div>
+                <div id="answers">
+                    <p>The Naive approach using smoothing looks better to me.</p>
+                    <p>The results are not the same. The details are more visible in the Naive approach</p>
+                    <p>The naive approach is simplier. The direct approach looks like it smoothed too much.</p>
+                </div>
+            <br>
+            <h3>(e) Creative Task: Image Sharpening (Required)</h3>
+            <h4>Question 5: You are given two test images, the task is to: </h4>
+            <ul>
+                <li>Extract High-Frequency Details</li>
+                    <ul>
+                        <li>Smooth the image using a Gaussian filter.</li>
+                        <li>Subtract the smoothed version from the original image to obtain the high-frequency component.</li>
+                    </ul>
+                <li>Sharpen the Image</li>
+                    <ul>
+                        <li>Add the high-frequency component back to the original image.</li>
+                        <li>Experiment with different blending weights (e.g., original + &sigma; x high-frequency, with &sigma; ranging from 1 to 10).</li>
+                        <li>Observe how the sharpness changes as you vary &sigma;.</li>
+                    </ul>
+                <li>Creative Exploration</li>
+                    <ul>
+                        <li>Apply your sharpening method to your own images.</li>
+                        <li>Pick at least one example where sharpening makes the image look noticeably better, and one example where too much sharpening creates artifacts (e.g., amplified noise).</li>
+                    </ul>
+            </ul>
+            <div class="images">
+                <article>
+                    <figure>
+                        <img src="img/ctSharpening.png" alt="CT scan of a heart" width="850" height="475"/>
+                        <figcaption>Sharpening of the CT scan image</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <figure>
+                        <img src="img/moonSharpening.png" alt="The moon" width="850" height="475"/>
+                        <figcaption>Sharpening of the moon image</figcaption>
+                    </figure>
+                </article>
+            </div>
+            <div id="answers">
+                <p>The details of the images continue to get better as the blending wieghts increase.</p>
+                <p>The CT scan High-Frequency details are difficult to see, however the moon is more noticable.</p>
+            </div>
+            <br>
+            <div class="images">
+                <article>
+                    <figure>
+                        <img src="img/alienSharpening.png" alt="Alien" width="825" height="475"/>
+                        <figcaption>Sharpening of an image of an Alien</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <figure>
+                        <img src="img/cityArtifacts.png" alt="City scape" width="825" height="475"/>
+                        <figcaption>Artifacts produced by sharpening of a city scape</figcaption>
+                    </figure>
+                </article>
+            </div>
+            <div id="answers">
+                <p>The two images used were stated in a google search as ai generated and were not my own.</p>
+            </div>
+        </div>
+        <br>
+        <div>
+            <h2>Part 3: Anisotropic Diffusion (Graduate Students)</h2>
+            <div class="parts">
+            <h3>Question 1: Implementation of Anisotropic Diffusion</h3>
+            <p>Run your implementation for different values of the parameter &#922; and different numbers of iterations. How does the choice of &#922; affect the result? What happens as you increase the number of iterations?</p>
+            <div class="images">
+                <article>
+                    <figure>
+                        <img src="img/expo1.png" alt="Woman with a feather hat" width="825" height="450"/>
+                        <figcaption>Exponential Diffusion of noisy test image 1</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <figure>
+                        <img src="img/recip1.png" alt="Woman with a feather hat" width="825" height="450"/>
+                        <figcaption>Reciprocal Diffusion of noisy test image 1</figcaption>
+                    </figure>
+                </article>
+            </div>
+            <div class="images">
+                <article>
+                    <figure>
+                        <img src="img/expo2.png" alt="MRI slice of a brain" width="825" height="450"/>
+                        <figcaption>Exponential Diffusion of noisy test image 2</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <figure>
+                        <img src="img/recip2.png" alt="MRI slice of a brain" width="825" height="450"/>
+                        <figcaption>Reciprocal Diffusion of noisy test image 2</figcaption>
+                    </figure>
+                </article>
+            </div>
+            <div id="answers">
+                <p>The higher the &#922; the smoother the image appears.</p>
+                <p>While the number of iterations causes the image to look blurrier.</p>
+            </div>
+            <h3>Question 2: Comparison with Gaussian Smoothing</h3>
+            <ul>
+                <li>Apply Gaussian smoothing to the same images.</li>
+                <li>Compare results side-by-side: how does anisotropic diffusion preserve edges differently? Discuss the results and the differences you observed.</li>
+            </ul>
+            <div class="images">
+                <article>
+                    <figure>
+                        <img src="img/comparison.png" alt="Woman in a hat with a feather and MRI slice of a brain" width="825" height="450"/>
+                        <figcaption></figcaption>
+                    </figure>
+                </article>
+            </div>
+            <div id="answers">
+                <p>The edges of the images using anisotropic diffusion appear softer/blurrier due to the high-frequenies being filtered out.</p>
+                <p>The edges are preserved but not enhanced (it doesn't increase the edge contrast)</p>
+                <p>To me the Gaussian smoothing looks better, keeping more of the details. While the anisotropic diffusion looks worse.</p>
+            </div>
+            <h3>Question 3 (optional): Think critically about the limitations of anisotropic diffusion.</h3>
+                <p>Suggest one possible improvement or alternative approach,<br>drawing from your own intuition or knowledge from other methods.</p>
+        </div>
+    </main>
+</body>
 </html>
