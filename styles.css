@@ -2,6 +2,26 @@
 header {
     /* height: 50px; */
     background-color: lightblue;
+    position:relative;
+    padding:28px 24px;
+    border-radius:22px;
+    /* background:linear-gradient(180deg, var(--bg-soft), transparent 60%); */
+    backdrop-filter:saturate(130%) blur(6px);
+    border:1px solid rgba(255,255,255,.08);
+    overflow:hidden;
+}
+
+header h1 {
+    margin:0 0 6px;
+    font-size:clamp(28px, 3vw, 44px);
+    line-height:1.1;
+    letter-spacing:.3px;
+}
+
+header p {
+    color:var(--muted);
+    font-size:clamp(14px, 1.7vw, 18px);
+    margin:0;
 }
 
 .tab {
