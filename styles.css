@@ -55,7 +55,7 @@ h1 {
     text-align: center;
 }
 
-article {
+.results {
     display: flex;
     justify-content: center;
 }
