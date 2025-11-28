@@ -1,1 +1,409 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta author="Joey Carlisle">
+    <title>CS 581: Project 4</title>
+    <link rel="icon" href="img/eye.png">
+    <link rel="stylesheet" type="text/css" href="../styles.css" />
+</head>
+<body>
+    <header>
+        <a class="inline" href="../index.html">&lt- Back Home</a>
+        <br>
+        <nav>
+            <h1>CS 581: Project 4 - Diffusion Models</h1>
+        </nav>
+        <h2 class="tab">Objective:</h2>
+        <h3 class="tab">
+            The goal of this project is to help you build a practical understanding of diffusion models, from the forward noising process to iterative denoising and sampling. 
+        </h3>
+        <ul>
+            <li class="tab">In Part 1, you will implement the forward diffusion process and experiment with both traditional denoising (Gaussian filtering) and a pre-trained diffusion model to understand how noise is added and removed. </li>
+            <li class="tab">In Part 2, you will work with a pre-trained diffusion model to perform sampling, explore classifier-free guidance, and apply the model to a creative task. </li>
+            <li class="tab">In Part 3, (graduate students only), you will explore a recent research paper on visual anagrams (CVPR 2024) and generate multi-view optical illusions using diffusion models. </li>
+            <li class="tab">In Part 4, (optional, extra credit 33%), you will train your own denoising U-Net on MNIST and implement a full DDPM pipeline. </li>
+        </ul>
+        <br>
+    </header>
+    <main>
+        <div class="tab">
+            <h2>Part 1: Lightweight Object Detection </h2>
+            <h3>Implement and train a lightweight detection model (SSD, Faster R-CNN with MobileNet, or YOLO). Object detection datasets are typically larger than the toy example datasets like MNIST used in image classification, here is a banana detection dataset that can be used, where the authors took photos of bananas and generated 1000 banana images with different rotations and sizes. </h3>
+            <div>
+                <h3>Tasks:</h3>
+                <ul>
+                    <li>Plot training loss curves (class error and bounding box error).</li>
+                    <li>Show 5 sample detections. </li>
+                    <li>Test the your detection model with your own banana images. Can you find any failure cases? Provide a few failure cases if you can find and discuss the possible reasons that caused the detection to fail. </li>
+                </ul>
+                <div class="images">
+                    <!-- <article>
+                        <br>
+                        <div class="center">
+                            <img src="img/Loss_curve.png" alt="Loss curve grapgh" width="400" height="400"/>
+                        </div>
+                        <div class="center">
+                            <p>The loss curve shows that the classification error and bounding box mean average error decreased rapidly within the first few epochs.<br>
+                            It stabilizes and then gradually decreases further as the training progresses. It suggests the model is well-optimized, without signs of overfitting.</p>
+                        </div>
+                        <br>
+                        <div class="center">
+                            <img src="img/detection1.png" alt="banana" width="600" height="300"/>
+                        </div>
+                        <div class="center">
+                            <img src="img/detection2.png" alt="banana" width="600" height="300"/>
+                        </div>
+                        <div class="center">
+                            <img src="img/detection3.png" alt="banana" width="600" height="300"/>
+                        </div>
+                        <div class="center">
+                            <img src="img/detection4.png" alt="banana" width="600" height="300"/>
+                        </div>
+                        <div class="center">
+                            <img src="img/detection5.png" alt="banana" width="600" height="300"/>
+                        </div>
+                        <div class="center">
+                            <p class="tab">
+                                The results show that the SSD algorithm wasn't successful. It wasn't able to place bounding boxes around the bananas. <br>
+                                I trained the model 6 times (each training took roughly an hour and a half). I did make a mistake in selecting 1 class instead <br>
+                                of two, I didn't account for the background being 0 while a banana is 1. I was not able to ascertain why it didn't work correctly 
+                                <br>and ran out of time to try any more options.
+                            </p>
+                        </div>
+                        <br>
+                        <div class="center">
+                            <img src="img/myBanana1.png" alt="banana" width="600" height="300"/>
+                        </div>
+                        <div class="center">
+                            <img src="img/myBanana2.png" alt="banana" width="600" height="300"/>
+                        </div>
+                        <div class="center">
+                            <img src="img/myBanana3.png" alt="banana" width="600" height="300"/>
+                        </div>
+                        <div class="center">
+                            <img src="img/myBanana4.png" alt="banana" width="600" height="300"/>
+                        </div>
+                        <div class="center">
+                            <img src="img/myBanana5.png" alt="banana" width="600" height="300"/>
+                        </div>
+                        <div class="center">
+                            <p>The results were the same on my images as they were for the test images, no bounding boxes were shown in the image.</p>
+                        </div>
+                    </article> -->
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="tab">
+            <h2>Part 2: Non-Maximum Suppression (NMS)</h2>
+            <h3>Implement NMS to process the object detector's output. </h3>
+            <div>
+                <h3>Tasks:</h3>
+                <ul>
+                    <li>Visualize outputs before/after NMS.</li>
+                    <li>Compare with PyTorch's NMS implementation. Any difference?</li>
+                    <li>Discuss its purpose and limitations.</li>
+                </ul>
+                <div class="images">
+                    <!-- <article>
+                        <div class="center">
+                            <img src="img/nms1.png" alt="banana" width="700" height="300"/>
+                        </div>
+                        <div class="center">
+                            <img src="img/nms2.png" alt="banana" width="700" height="300"/>
+                        </div>
+                        <div class="center">
+                            <img src="img/nms3.png" alt="banana" width="700" height="300"/>
+                        </div>
+                        <div class="center">
+                            <img src="img/nms4.png" alt="banana" width="700" height="300"/>
+                        </div>
+                        <div class="center">
+                            <img src="img/nms5.png" alt="banana" width="700" height="300"/>
+                        </div>
+                        <div class="center">
+                            <p>I used the same test images from Part 1, but these results didn't have bounding boxes either. Due to this I wasn't able to<br>compare them to be able to say whether there was a difference or not.
+                            The purpose of NMS is to remove<br>overlapping and redundant bounding boxes keeping the most confident bounding boxes for the model. However,<br>
+                            there is the possibility that NMS could remove valid boxes causing missed detections.</p>
+                        </div>
+                    </article> -->
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="tab">
+            <h2>Part 3: Human-Object Interaction (HOI) Analysis using VLMs</h2>
+            <h3>Perform zero-shot HOI analysis using VLMs on a subset of HICO-DET dataset (huggingface zhimeng/hico_det  Datasets at Hugging Face). </h3>
+            <h3>Tasks:</h3>
+            <ul>
+                <li>Use one (or more) open-source or closed-source VLMs (e.g., Gemini, GPT, LLaVA, Qwen) to predict human-object interactions.</li>
+                <ul>
+                    <li>Come up with your prompt to guide the VLMs to predict &ltinteraction object&gt. For example, &lthold apple&gt, &ltride bicycle&gt.</li>
+                </ul>
+                <li>Can you identify a few failure cases where VLMs fail to prediction the HOI classes for the given images? If so, discuss the possible reasons. </li>
+                <li>Give it a try to fix the failure cases via better prompts or few-shot examples (in-context learning). Discuss if your solution works or the failure cases still cannot be solved. </li>
+            </ul>
+            
+            <div class="images">
+                <br>
+                <div>
+                    <h3>Base Prompt</h3>
+                </div>
+                <div>
+                    <p>I want to use you as an HOI (human-object interaction). For the main person in the image, list what interactions the person is doing with physical objects. Use the the format ("object", "interaction"). Make sure to keep the format brackets and order "object" -> "interaction".</p>
+                </div>
+                <!-- <div class="center">
+                    <table border="1">
+                        <tr>
+                            <th>Image</th>
+                            <th>Ground Truth</th>
+                            <th>Gemini 2.5 Flash</th>
+                            <th>Claude 4.5</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="img/Baseball.png" alt="Baseball" width="220" height="150"/>
+                            </td>
+                            <td>
+                                <p>[('baseball_bat', 'hold'),<br> ('baseball_bat', 'swing'),<br> ('baseball_bat', 'wield')]</p>
+                            </td>
+                            <td>
+                                <p><b>Batter (Person in Red Uniform)</b><br>
+                                    <span style="color:red;">("bat", "swinging")</span>,<br>("helmet", "wearing"), <br>("glove (on hands)", "wearing"), <br>("leg guard", "wearing"), <br>("dirt/ground", "standing on"), <br>("uniform (shirt/pants)", "wearing"), 
+                                    <br>("shoes", "wearing") <br><b>Catcher (Person in Black/Gray Uniform)</b> <br>("mitt/glove", "holding"), <br>("mask/helmet", "wearing"), <br>("chest protector", "wearing"), <br>("shin guards", "wearing"),
+                                    <br>("dirt/ground", "kneeling/crouching on"), <br>("shoes", "wearing")</p>
+                            </td>
+                            <td>
+                                <p><b>Batter (center, in red uniform):</b><br>
+                                <span style="color:red;">("baseball bat", "swinging")</span>, <br>("helmet", "wearing"), <br>("jersey", "wearing"), <br>("pants", "wearing"), <br>("batting gloves", "wearing"), <br>("cleats", "wearing"), <br>("socks", "wearing"), <br>
+                                ("ground", "standing on"), <br><b>Catcher (left, crouching):</b><br>
+                                ("catcher's mask", "wearing"), <br>("catcher's mitt", "wearing"), <br>("chest protector", "wearing"), <br>("shin guards", "wearing"), <br>("ground", "crouching on")<br>
+                                <b>People in dugout (background):</b><br>("dugout", "standing in"), <br>("uniforms", "wearing")<br>
+                                <b>Spectators (background right):</b><br>("stands", "sitting in")
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="img/Snowboarder.png" alt="Snow Boarding" width="220" height="150"/>
+                            </td>
+                            <td>
+                                <p>[('snowboard', 'hold'), <br>('snowboard', 'jump'), <br>('snowboard', 'ride'), <br>('snowboard', 'stand_on'), <br>('snowboard', 'wear')]</p>
+                            </td>
+                            <td>
+                                <p>
+                                    <span style="color:red;">("snowboard", "riding/attached to")</span>, <br>("bindings", "attached to"), <br>("boots", "wearing"),<br>
+                                    ("jacket", "wearing"), <br>("pants", "wearing"), <br>("goggles/sunglasses", "wearing"), <br>("air", "flying in")
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    <span style="color:red;">("snowboard", "riding")</span>, <br>("snowboard", "gripping"), <br>("jacket", "wearing"), <br>("snow pants", "wearing"), <br>("helmet", "wearing"),<br>
+                                    ("goggles", "wearing"), <br>("gloves", "wearing"), <br>("boots", "wearing"), <br>("air", "jumping through")
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="img/Skateshop.png" alt="Skate shop" width="150" height="200"/>
+                            </td>
+                            <td>
+                                <p>[('skateboard', 'no_interaction')]</p>
+                            </td>
+                            <td>
+                                <p>
+                                    ("sunglasses", "wearing"), <br>("ring", "wearing"), <br>("counter/surface", "resting hand on"), <br>("skateboard decks", "standing in front of"), <br>("tank top", "wearing"),<br>
+                                    ("pen/small object", "holding/touching")
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    ("sunglasses", "wearing"), <br>("tank top", "wearing"), <br>("ring", "wearing"), <br>("counter", "leaning on"), <br>("skateboard wall display", "standing in front of")
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="img/Soccer.png" alt="Soccer" width="220" height="150"/>
+                            </td>
+                            <td>
+                                <p>[('sports_ball', 'carry'), <br>('sports_ball', 'hold')]</p>
+                            </td>
+                            <td>
+                                <p>
+                                    <b>main person in the red and white uniform:</b><br>
+                                    <span style="color:red;">("soccer ball", "holding")</span>, <br>("grass/field", "running/standing on"), <br>("uniform/kit", "wearing"),<br>
+                                    ("boots (cleats)", "wearing"), <br>("flagpole", "running near")<br>
+                                    <b>players in the background:</b><br>
+                                    ("grass/field", "running/standing on"), <br>("soccer ball", "kicking/running near (implied)"), <br>("uniforms/kits", "wearing")
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    <b>Player in red/white (foreground):</b><br>
+                                    <span style="color:red;">("soccer ball", "holding")</span>, <br>("jersey", "wearing"), <br>("shorts", "wearing"), <br>("soccer cleats", "wearing"), <br>("field", "walking on")<br>
+                                    <b>Players in blue/white (background):</b><br>
+                                    ("jerseys", "wearing"), <br>("shorts", "wearing"), <br>("soccer cleats", "wearing"), <br>("field", "walking on")<br>
+                                    <b>Players in red/white (background):</b><br>
+                                    ("jerseys", "wearing"), <br>("shorts", "wearing"), <br>("soccer cleats", "wearing"), <br>("field", "walking on")
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="img/Boats.png" alt="Boats" width="220" height="150"/>
+                            </td>
+                            <td>
+                                <p>[('boat', 'ride'), <br>('boat', 'sail'), <br>('boat', 'stand_on')]</p>
+                            </td>
+                            <td>
+                                <p>
+                                    <b>Boat in the Foreground (Right)</b><br>
+                                    <span style="color:red;">("boat/dhow", "sailing on")</span>, <br>("sail", "operating/managing"), <br>("water", "floating on")<br>
+                                    <b>Boat in the Background (Left)</b><br>
+                                    <span style="color:red;">("boat/dhow", "sailing on")</span>, <br>("sail", "operating/managing"), <br>("water", "floating on")
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    <b>People on right sailboat (foreground):</b><br>
+                                    <span style="color:red;">("sailboat", "sailing")</span>, <br>("sailboat", "sitting in"), <br>("sail", "operating"), <br>("rudder", "steering")<br>
+                                    <b>People on left sailboat (background):</b><br>
+                                    <span style="color:red;">("sailboat", "sailing")</span>, <br>("sailboat", "sitting in"), <br>("sail", "operating"), <br>("rudder", "steering")
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="img/Planes.png" alt="Planes" width="220" height="150"/>
+                            </td>
+                            <td>
+                                <p>[('airplane', 'no_interaction')]</p>
+                            </td>
+                            <td>
+                                <p>
+                                    The image shows several parked airliners <br>
+                                    and there are no people visibly <br>
+                                    interacting with the physical objects in<br>
+                                    the immediate foreground or midground. <br>
+                                    Therefore, I cannot list any human-object <br>
+                                    interactions in the format you requested <br>
+                                    based on this specific picture.
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    <b>Person near building (bottom right):</b><br>
+                                    ("tarmac", "standing on"), <br>("clothing", "wearing")<br>  
+                                    Note: The people in this <br>
+                                    image are quite small and distant,<br>
+                                    making it difficult to identify<br>
+                                    specific detailed interactions<br>
+                                    beyond basic presence and standing<br>
+                                    on the ground surface.
+                                </p>
+                            </td>
+                        </tr>
+                    </table> -->
+                    <br>
+                    <p class="tab"> 
+                        For this project, wanted to use to use two Vision Language Models (VLM) that are considered strong but are recognized for different aspects. 
+                        Google Gemini 2.5 Flash is known for excelling in multimodal tasks while Claude 4.5 is recognized for its structured and reliable responses, especially in technical contexts. 
+                        From the results, they are generally good at human object interaction detection (HoI) with one minor incorrect response by Claude. 
+                        I was surprised at how many HoI's were found by both compared to the ground truth, but didn't find all the listed ground truths. This leads me to wonder if the ground truths should be expanded or updated. 
+                        The matching HoI's to the ground truth are in red. There was one incorrect finding in the Airplane image by Claude, it detected a human in the lower right corner. 
+                        There is an object, just not a human. It was possibly due to how small the object is and it being near the shack.
+                    </p>
+                    <br>
+                    <h3>Prompt Adjustment</h3>
+                    <p class="tab">
+                        I want to use you as an HOI (human-object interaction). For the main person in the image, list what interactions the person is doing with physical objects. 
+                        Use the format ("object", "interaction"). Make sure to keep the format brackets and order "object" -> "interaction". If there is no clear interaction: output (no_interaction).
+                     </p>
+                    <!-- <table border="1">
+                        <tr>
+                            <th>Image</th>
+                            <th>Ground Truth</th>
+                            <th>Gemini 2.5 Flash</th>
+                            <th>Claude 4.5</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="img/Baseball.png" alt="Baseball" width="220" height="150"/>
+                            </td>
+                            <td>
+                                <p>[('baseball_bat', 'hold'),<br> ('baseball_bat', 'swing'),<br> ('baseball_bat', 'wield')]</p>
+                            </td>
+                            <td>
+                                <p>
+                                    <b>main person</b><br>(the batter in the red uniform):<br>
+                                    <span style="color:red;">("bat", "swinging")</span>, <br>("helmet", "wearing"), <br>("glove (on hands)", "wearing"), <br>("leg guard", "wearing"),<br>
+                                    ("uniform (shirt)", "wearing"), <br>("uniform (pants)", "wearing"), <br>("shoes", "wearing"), <br>("dirt/ground", "standing on")
+                            </td>
+                            <td>
+                                <p>
+                                    <b>main person (the batter in red):</b><br>
+                                    <span style="color:red;">("bat", "holding")</span>, <br><span style="color:red;">("bat", "swinging")</span>, <br>("helmet", "wearing"),
+                                    <br>("uniform", "wearing"), <br>("batting gloves", "wearing"), <br>("socks", "wearing"), <br>("cleats", "wearing")
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="img/Soccer.png" alt="Soccer" width="220" height="150"/>
+                            </td>
+                            <td>
+                                <p>[('sports_ball', 'carry'), <br>('sports_ball', 'hold')]</p>
+                            </td>
+                            <td>
+                                <p>
+                                    <b>main person in the image</b><br>
+                                    (player in the foreground wearing <br>the red and white uniform):<br>
+                                    <span style="color:red;">("soccer ball", "holding")</span>, <br>("grass/field", "running/standing on"), <br>("uniform/kit", "wearing"),<br>
+                                    ("boots (cleats)", "wearing"), <br>("flagpole", "running near")
+
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    <b>main person (the player in red with the ball):</b><br>
+                                    <span style="color:red;">("soccer ball", "holding")</span>, <br><span style="color:red;">("soccer ball", "carrying")</span>, <br>("jersey", "wearing"),
+                                    <br>("shorts", "wearing"), <br>("socks", "wearing"), <br>("cleats", "wearing"), <br>("grass", "walking on")
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="img/Planes.png" alt="Planes" width="220" height="150"/>
+                            </td>
+                            <td>
+                                <p>[('airplane', 'no_interaction')]</p>
+                            </td>
+                            <td>
+                                <p>
+                                    <span style="color:red;">(no_interaction)</span>
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    <span style="color:red;">(no_interaction)</span>
+                                </p>
+                            </td>
+                        </tr>
+                    </table> -->
+                    <div>
+                        <p class="tab">
+                            After adjusting the prompt to specify the main person in the image, the results for Claude did improve by 
+                            finding one more of the ground truth for the Baseball and Soccer images. Claude also didn't detect a human 
+                            in the Airplane image this time.
+                        </p>
+                    </div>
+                </div>
+            </div>   
+        </div>
+    </main>
+</body>
+</html>
